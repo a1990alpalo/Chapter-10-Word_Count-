@@ -34,10 +34,10 @@ The program displays a menu of four predefined text files. The user selects one 
 
 The program begins by displaying a menu:
 
-1. Moby Dick (Chapter 1)
-2. Frankenstein (Chapter 1)
-3. Alice in Wonderland (Chapter 1)
-4. Pride and Prejudice (Chapter 1)
+1. Princess Mars
+2. Tarzan
+3. treasure Island
+4. Monte Carlo 
 5. Exit
 
 When the user selects a valid option, the program creates a `WordAnalyzer` object using the selected file path. The `process_file()` method reads the file, cleans each line, splits the text into words, and stores each word count in a dictionary.
