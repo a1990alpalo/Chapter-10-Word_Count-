@@ -67,15 +67,15 @@ Follow the menu prompts by entering a number from 1 to 5.
 ```text
 --- Word Analyzer ---
 Please select a file to analyze:
-1. Moby Dick (Chapter 1)
-2. Frankenstein (Chapter 1)
-3. Alice in Wonderland (Chapter 1)
-4. Pride and Prejudice (Chapter 1)
+1. Princess Mars
+2. Tarzan
+3. treasure Island
+4. Monte Carlo 
 5. Exit
 
 Enter your choice (1-5): 1
 
-Processing 'moby_dick_ch1.txt'...
+Processing 'Princess_Mars.txt'...
 
 and             :: 3
 call            :: 1
