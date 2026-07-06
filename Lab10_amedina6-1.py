@@ -163,7 +163,7 @@ def display_menu() -> None:
     print("1. Princess of Mars")
     print("2. Tarzan")
     print("3. Treasure Island")
-    print("4. The Count of Monte Cristo")
+    print("4. Monte Cristo")
     print("5. Exit")
 
 
