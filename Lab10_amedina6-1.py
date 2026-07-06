@@ -55,23 +55,23 @@ class WordAnalyzer:
 def main():
     """Display a menu and analyze the selected text file."""
     files = {
-        "1": {
-            "name": "Moby Dick (Chapter 1)",
-            "path": Path("moby_dick_ch1.txt"),
-        },
-        "2": {
-            "name": "Frankenstein (Chapter 1)",
-            "path": Path("frankenstein_ch1.txt"),
-        },
-        "3": {
-            "name": "Alice in Wonderland (Chapter 1)",
-            "path": Path("alice_in_wonderland_ch1.txt"),
-        },
-        "4": {
-            "name": "Pride and Prejudice (Chapter 1)",
-            "path": Path("pride_and_prejudice_ch1.txt"),
-        },
-    }
+    "1": {
+        "name": "Princess Mars",
+        "path": Path("princess_mars.txt"),
+    },
+    "2": {
+        "name": "Tarzan",
+        "path": Path("Tarzan.txt"),
+    },
+    "3": {
+        "name": "Treasure Island",
+        "path": Path("treasure_island.txt"),
+    },
+    "4": {
+        "name": "Monte Cristo",
+        "path": Path("monte_cristo.txt"),
+    },
+}
 
     while True:
         print("\n--- Word Analyzer ---")
