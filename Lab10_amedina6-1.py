@@ -1,109 +1,172 @@
-""""Word Count Analyzer
-Author: Alberto Medina 
-Purpose: This program uses (OOP), pathlib, file I/O, exception handling, as well as string manipulation to count 
-the frequency of words in a text file
+"""
+Word Count Analyzer
 
-Starter code: No starter code was used. It was built using the assignment requirements
-Date: July 5, 2026"""
+Author: Alberto Medina
+Purpose: This program uses pathlib, file I/O, exception handling,
+and string manipulation to count the frequency of words in text files.
+
+Starter code: This program was modified from the professor's sample
+word_counter.py code.
+
+Date: July 5, 2026
+"""
 
 from pathlib import Path
-import string 
 
 
-class WordAnalyzer: 
-    """Analyzes word frequency in a text file."""
+class FileEmptyError(Exception):
+    """Raised when there is a file, but the contents are empty."""
 
-    def __init__(self, filepath):
-        """Starts the analyzer with a file path and an empty dictionary."""
-        self._filepath = Path(filepath)
-        self._word_frequencies = {}
+    pass
 
-    
-    def process_file(self):
-        """Read the file and count the frequency of each word."""
-        try:
-            if not self._filepath.exists():
-                raise FileNotFoundError(self._filepath)
 
-            punctuation_table = str.maketrans("", "", string.punctuation)
+# Creating empty dictionary to use
+freq_dict = {}
 
-            with self._filepath.open("r", encoding="utf-8") as file:
-                for line in file:
-                    clean_line = line.translate(punctuation_table)
-                    clean_line = clean_line.lower()
-                    words = clean_line.split()
 
-                    for word in words:
-                        if word in self._word_frequencies:
-                            self._word_frequencies[word] += 1
-                        else:
-                            self._word_frequencies[word] = 1
+def is_valid_file(path: Path) -> bool:
+    """
+    Checks if a file exists and has contents.
 
-            return True
+    Parameters:
+        path(Path): The path of the file.
 
-        except FileNotFoundError:
-            print(f"Error: The file '{self._filepath}' was not found.")
-            return False
-    
-    def print_report(self):
-        """Print an alphabetical report of word frequencies."""
-        words = sorted(self._word_frequencies.keys())
+    Returns:
+        bool: True if the file exists and has contents.
+    """
 
-        for word in words:
-            print(f"{word:<15} :: {self._word_frequencies[word]}")
+    try:
+        contents = path.read_text(encoding="utf-8")
 
-def main():
-    """Display a menu and analyze the selected text file."""
-    files = {
-    "1": {
-        "name": "Princess Mars",
-        "path": Path("princess_mars.txt"),
-    },
-    "2": {
-        "name": "Tarzan",
-        "path": Path("Tarzan.txt"),
-    },
-    "3": {
-        "name": "Treasure Island",
-        "path": Path("treasure_island.txt"),
-    },
-    "4": {
-        "name": "Monte Cristo",
-        "path": Path("monte_cristo.txt"),
-    },
-}
+        if len(contents) <= 0:
+            raise FileEmptyError("The contents of the file is empty")
 
-    while True:
-        print("\n--- Word Analyzer ---")
-        print("Please select a file to analyze:")
+    except FileEmptyError:
+        print(f"\n********ERROR: {path.name} is empty")
+        return False
 
-        for choice, file_info in files.items():
-            print(f"{choice}. {file_info['name']}")
+    except FileNotFoundError:
+        print(f"\n********ERROR: {path.name} does not exist")
+        return False
 
-        print("5. Exit")
+    else:
+        return True
 
-        choice = input("\nEnter your choice (1-5): ")
 
-        if choice == "5":
-            print("\nGoodbye!")
-            break
+def reset_freq() -> None:
+    """Clears contents of dictionary."""
 
-        if choice not in files:
-            print("\nInvalid choice. Please select from 1-5.")
-            input("\nPress Enter to return to the menu...")
-            continue
+    freq_dict.clear()
 
-        selected_file = files[choice]["path"]
 
-        print(f"\nProcessing '{selected_file}'...\n")
+def process_file(path: Path) -> None:
+    """Processes the file and calculates word frequency."""
 
-        analyzer = WordAnalyzer(selected_file)
+    words = convert_content_to_words(path)
+    calculate_word_freq(sorted(words))
 
-        if analyzer.process_file():
-            analyzer.print_report()
 
-        input("\nPress Enter to return to the menu...")
+def convert_content_to_words(path: Path) -> list[str]:
+    """
+    Takes path and reads contents, splits into lines,
+    and splits lines into word lists.
+    """
+
+    words = []
+    contents = path.read_text(encoding="utf-8")
+    lines = contents.splitlines()
+
+    for line in lines:
+        line = remove_punc(line)
+        words.extend(line.split())
+
+    return words
+
+
+def remove_punc(contents: str) -> str:
+    """Remove all punctuation from words in a string."""
+
+    punctuation_tuple = (
+        ".",
+        ",",
+        "!",
+        "?",
+        ";",
+        ":",
+        '"',
+        "'",
+        "(",
+        ")",
+        "[",
+        "]",
+        "{",
+        "}",
+        "-",
+        "_",
+        "—",
+        "“",
+        "”",
+        "‘",
+        "’",
+    )
+
+    for punctuation in punctuation_tuple:
+        if punctuation == "-" or punctuation == "—":
+            contents = contents.replace(punctuation, " ")
+        else:
+            contents = contents.replace(punctuation, "")
+
+    return contents
+
+
+def calculate_word_freq(words: list[str]) -> None:
+    """Calculate frequency of each word."""
+
+    for word in words:
+        temp = word.lower()
+        freq_dict[temp] = freq_dict.get(temp, 0) + 1
+
+
+def display_word_freq() -> None:
+    """Display word frequency."""
+
+    if len(freq_dict) == 0:
+        print("No words to display.")
+        return
+
+    fill_chr = "."
+    max_key_length = max(len(str(key)) for key in freq_dict.keys())
+    max_value_length = max(len(str(value)) for value in freq_dict.values())
+
+    for key, value in freq_dict.items():
+        print(
+            f"{str(key).ljust(max_key_length, fill_chr)}"
+            f"{fill_chr * 5}"
+            f"{str(value).rjust(max_value_length, fill_chr)}"
+        )
+
+
+def run_word_counter(path: Path) -> None:
+    """Validate, process, and display the word frequency for one file."""
+
+    reset_freq()
+
+    print(f"\nWord frequency for: {path.name}")
+    print("-" * 50)
+
+    if is_valid_file(path):
+        process_file(path)
+        display_word_freq()
+    else:
+        print("Issues with file")
 
 
 if __name__ == "__main__":
-    main()
+    book_files = [
+        Path.cwd() / "princess_mars.txt",
+        Path.cwd() / "Tarzan.txt",
+        Path.cwd() / "treasure_island.txt",
+    ]
+
+    for book_file in book_files:
+        run_word_counter(book_file)
