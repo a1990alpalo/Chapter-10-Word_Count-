@@ -108,6 +108,7 @@ def remove_punc(contents: str) -> str:
         "”",
         "‘",
         "’",
+        "•",
     )
 
     for punctuation in punctuation_tuple:
@@ -134,16 +135,10 @@ def display_word_freq() -> None:
         print("No words to display.")
         return
 
-    fill_chr = "."
     max_key_length = max(len(str(key)) for key in freq_dict.keys())
-    max_value_length = max(len(str(value)) for value in freq_dict.values())
 
-    for key, value in freq_dict.items():
-        print(
-            f"{str(key).ljust(max_key_length, fill_chr)}"
-            f"{fill_chr * 5}"
-            f"{str(value).rjust(max_value_length, fill_chr)}"
-        )
+    for key, value in sorted(freq_dict.items()):
+        print(f"{str(key).ljust(max_key_length)} :: {value}")
 
 
 def run_word_counter(path: Path) -> None:
@@ -151,8 +146,7 @@ def run_word_counter(path: Path) -> None:
 
     reset_freq()
 
-    print(f"\nWord frequency for: {path.name}")
-    print("-" * 50)
+    print(f"\nProcessing '{path.name}'...\n")
 
     if is_valid_file(path):
         process_file(path)
@@ -161,12 +155,45 @@ def run_word_counter(path: Path) -> None:
         print("Issues with file")
 
 
-if __name__ == "__main__":
-    book_files = [
-        Path.cwd() / "princess_mars.txt",
-        Path.cwd() / "Tarzan.txt",
-        Path.cwd() / "treasure_island.txt",
-    ]
+def display_menu() -> None:
+    """Display the word analyzer menu."""
 
-    for book_file in book_files:
-        run_word_counter(book_file)
+    print("\n--- Word Analyzer ---")
+    print("Please select a file to analyze:")
+    print("1. Princess of Mars")
+    print("2. Tarzan")
+    print("3. Treasure Island")
+    print("4. The Count of Monte Cristo")
+    print("5. Exit")
+
+
+def main() -> None:
+    """Run the word analyzer menu."""
+
+    book_files = {
+        "1": Path.cwd() / "princess_mars.txt",
+        "2": Path.cwd() / "Tarzan.txt",
+        "3": Path.cwd() / "treasure_island.txt",
+        "4": Path.cwd() / "monte_cristo.txt",
+    }
+
+    while True:
+        display_menu()
+
+        choice = input("\nEnter your choice (1-5): ")
+
+        if choice == "5":
+            print("\nGoodbye!")
+            break
+
+        elif choice in book_files:
+            run_word_counter(book_files[choice])
+            input("\nPress Enter to return to the menu...")
+
+        else:
+            print("\nInvalid choice. Please select from 1-5.")
+            input("\nPress Enter to return to the menu...")
+
+
+if __name__ == "__main__":
+    main()
