@@ -24,11 +24,10 @@ The program displays a menu of four predefined text files. The user selects one 
 ## Files Included
 
 * `Lab10_amedina6-1.py` - Main Python program
-* `moby_dick_ch1.txt` - Sample text file
-* `frankenstein_ch1.txt` - Sample text file
-* `alice_in_wonderland_ch1.txt` - Sample text file
-* `pride_and_prejudice_ch1.txt` - Sample text file
-* `requirements.txt` - Project dependency list
+* `Monte_cristo.txt` - Sample text file
+* `princess_mars.txt` - Sample text file
+* `tarzan.txt` - Sample text file
+* `treasure_island` - sample text file 
 * `.gitignore` - Files and folders ignored by Git
 
 ## How the Program Works
